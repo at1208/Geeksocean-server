@@ -5,7 +5,7 @@ const { read, publicProfile, update, photo, users, userById } = require('../cont
 
 router.get('/user/profile', requireSignin, authMiddleware, read);
 router.get('/user/:username', publicProfile);
-router.put('/user/update', requireSignin, authMiddleware, update);
+router.patch('/user/update', requireSignin, authMiddleware, update);
 router.get('/user/photo/:username', photo);
 router.get('/users', users);
 router.get('/user/userdata/:id', userById);

@@ -38,7 +38,7 @@ exports.create = (req, res) => {
             });
         }
 
-        const { title, body, categories, tags } = fields;
+        const { title, body, categories, tags, keywords } = fields;
 
         if (!title || !title.length) {
             return res.status(400).json({
@@ -75,6 +75,7 @@ exports.create = (req, res) => {
         // categories and tags
         let arrayOfCategories = categories && categories.split(',');
         let arrayOfTags = tags && tags.split(',');
+        let arrayOfKeywords = keywords && keywords.split(',');
 
         if (files.photo) {
             if (files.photo.size > 10000000) {
@@ -107,7 +108,17 @@ exports.create = (req, res) => {
                                         error: errorHandler(err)
                                     });
                                 } else {
-                                    res.json(result);
+                                   Blog.findByIdAndUpdate(result._id, { $push: { keywords: arrayOfKeywords } }, { new: true }).exec(
+                                      (err, result) => {
+                                          if (err) {
+                                              return res.status(400).json({
+                                                  error: errorHandler(err)
+                                              });
+                                          } else {
+                                              res.json(result);
+                                          }
+                                      }
+                                  );
                                 }
                             }
                         );

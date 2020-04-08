@@ -1,15 +1,17 @@
-const Tag = require('../models/tag');
+const Keyword = require('../models/keyword');
 const Blog = require('../models/blog');
 const slugify = require('slugify');
 const { errorHandler } = require('../helpers/dbErrorHandler');
+var randomWords = require('random-words');
 
-exports.create = (req, res) => {
+
+exports.createKeyword = async (req, res) => {
     const { name } = req.body;
-    let slug = slugify(name).toLowerCase();
 
-    let tag = new Tag({ name, slug });
+    let slug = slugify(name + ' ' + randomWords({ exactly: 5, join: ' ' })).toLowerCase();
+    let keywords = new Keyword({ name, slug });
 
-    tag.save((err, data) => {
+  await keywords.save((err, data) => {
         if (err) {
             console.log(err);
             return res.status(400).json({
@@ -20,8 +22,9 @@ exports.create = (req, res) => {
     });
 };
 
+
 exports.list = (req, res) => {
-    Tag.find({}).exec((err, data) => {
+    Keyword.find({}).exec((err, data) => {
         if (err) {
             return res.status(400).json({
                 error: errorHandler(err)
@@ -34,16 +37,17 @@ exports.list = (req, res) => {
 exports.read = (req, res) => {
     const slug = req.params.slug.toLowerCase();
 
-    Tag.findOne({ slug }).exec((err, tag) => {
+    Keyword.findOne({ slug }).exec((err, keyword) => {
         if (err) {
             return res.status(400).json({
-                error: 'Tag not found'
+                error: 'Keyword not found'
             });
         }
         // res.json(tag);
-        Blog.find({ tags: tag })
+        Blog.find({ keywords: keyword })
             .populate('categories', '_id name slug')
             .populate('tags', '_id name slug')
+            .populate('keywords', '_id name slug')
             .populate('postedBy', '_id name username')
             .select('_id title slug excerpt categories postedBy tags createdAt updatedAt')
             .exec((err, data) => {
@@ -52,7 +56,7 @@ exports.read = (req, res) => {
                         error: errorHandler(err)
                     });
                 }
-                res.json({ tag: tag, blogs: data });
+                res.json({ keyword: keyword, blogs: data });
             });
     });
 };
@@ -60,14 +64,14 @@ exports.read = (req, res) => {
 exports.remove = (req, res) => {
     const slug = req.params.slug.toLowerCase();
 
-    Tag.findOneAndRemove({ slug }).exec((err, data) => {
+    Keyword.findOneAndRemove({ slug }).exec((err, data) => {
         if (err) {
             return res.status(400).json({
                 error: errorHandler(err)
             });
         }
         res.json({
-            message: 'Tag deleted successfully'
+            message: 'Keyword deleted successfully'
         });
     });
 };

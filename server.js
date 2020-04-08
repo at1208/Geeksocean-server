@@ -12,6 +12,7 @@ const userRoutes = require('./routes/user');
 const categoryRoutes = require('./routes/category');
 const tagRoutes = require('./routes/tag');
 const formRoutes = require('./routes/form');
+const keywordRoutes = require('./routes/keyword');
 
 // app
 const app = express();
@@ -44,6 +45,22 @@ app.use('/api', userRoutes);
 app.use('/api', categoryRoutes);
 app.use('/api', tagRoutes);
 app.use('/api', formRoutes);
+app.use('/api', keywordRoutes);
+
+
+//
+// if (process.env.NODE_ENV === 'production') {
+//     app.get('*', (req, res, next) => {
+//         let hostname = req.hostname;
+//         if (hostname.includes('geeksocean.com')) {
+//             console.log('yes includes my domain name in ', hostname);
+//             next();
+//         } else {
+//             res.redirect(301, 'https://geeksocean.com/');
+//             console.log('no dont includes domain_name in ', hostname);
+//         }
+//     });
+
 
 // port
 const port = process.env.PORT || 8000;
