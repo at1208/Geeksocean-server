@@ -42,7 +42,11 @@ const blogSchema = new mongoose.Schema(
             type: ObjectId,
             ref: 'User'
         },
-        comments: []
+        comments: [],
+        draftStatus: {
+          type: Boolean,
+          default: false
+        }
     },
     { timestamps: true }
 );

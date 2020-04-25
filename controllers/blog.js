@@ -10,23 +10,6 @@ const { errorHandler } = require('../helpers/dbErrorHandler');
 const fs = require('fs');
 const { smartTrim } = require('../helpers/blog');
 
-/*
-const { title, body, categories, tags } = req.body;
-const categoriesArray = categories.split(",");
-const tagsArray = tags.split(",");
-
-const blog = await Blog.create({
-  title,
-  body,
-  slug: slugify(title, { lower: true }),
-  metaTitle: `${title} | ${process.env.APP_NAME}`,
-  metaDesc: stripHtml(body.substring(0, 160)),
-  postedBy: req.user.id,
-  photo: req.file.location,
-  categories: categoriesArray,
-  tags: tagsArray
-});
- */
 
 exports.create = (req, res) => {
     let form = new formidable.IncomingForm();
@@ -387,4 +370,21 @@ module.exports.blogCommentsById = async (req,res) => {
   res.json({
    comments
   })
+}
+
+module.exports.draftStatus = async (req,res) => {
+  const _id = req.params.id
+  
+  await Blog.findByIdAndUpdate({_id: _id}, {draftStatus: true}).exec((err,result) => {
+    if(err){
+      res.status(400).json({
+        error: "Failed to update"
+      })
+    }
+    res.status(200).json({
+      message:"draft status successfully updated ",
+      data: result.draftStatus
+    })
+  })
+
 }
