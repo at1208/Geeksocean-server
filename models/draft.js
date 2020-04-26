@@ -17,7 +17,7 @@ const blogSchema = new mongoose.Schema(
         },
         body: {
             type: {},
-            required: true,
+            // required: true,
             min: 200,
             max: 2000000
         },
@@ -35,8 +35,8 @@ const blogSchema = new mongoose.Schema(
             data: Buffer,
             contentType: String
         },
-        categories: [{ type: ObjectId, ref: 'Category', required: true }],
-        tags: [{ type: ObjectId, ref: 'Tag', required: true }],
+        categories: [{ type: ObjectId, ref: 'Category' }],
+        tags: [{ type: ObjectId, ref: 'Tag', }],
 
         postedBy: {
             type: ObjectId,
@@ -47,4 +47,4 @@ const blogSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-module.exports = mongoose.model('Blog', blogSchema);
+module.exports = mongoose.model('Draft', blogSchema);

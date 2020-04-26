@@ -372,19 +372,4 @@ module.exports.blogCommentsById = async (req,res) => {
   })
 }
 
-module.exports.draftStatus = async (req,res) => {
-  const _id = req.params.id
-  
-  await Blog.findByIdAndUpdate({_id: _id}, {draftStatus: true}).exec((err,result) => {
-    if(err){
-      res.status(400).json({
-        error: "Failed to update"
-      })
-    }
-    res.status(200).json({
-      message:"draft status successfully updated ",
-      data: result.draftStatus
-    })
-  })
-
-}
+ 
