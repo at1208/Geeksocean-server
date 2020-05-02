@@ -15,6 +15,7 @@ const formRoutes = require('./routes/form');
 const keywordRoutes = require('./routes/keyword');
 const draftRoutes = require('./routes/draft');
 const popularRoutes = require('./routes/popular');
+const faqRoutes = require('./routes/faq');
 
 // app
 const app = express();
@@ -50,6 +51,7 @@ app.use('/api', formRoutes);
 app.use('/api', keywordRoutes);
 app.use('/api', draftRoutes);
 app.use('/api', popularRoutes);
+app.use('/api', faqRoutes);
 
 //
 // if (process.env.NODE_ENV === 'production') {

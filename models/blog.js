@@ -37,6 +37,7 @@ const blogSchema = new mongoose.Schema(
         },
         categories: [{ type: ObjectId, ref: 'Category', required: true }],
         tags: [{ type: ObjectId, ref: 'Tag', required: true }],
+        faqs: [{ type: ObjectId, ref: 'FAQ', required:true }],
 
         postedBy: {
             type: ObjectId,

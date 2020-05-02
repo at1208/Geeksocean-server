@@ -21,7 +21,7 @@ exports.create = (req, res) => {
             });
         }
 
-        const { title, body, categories, tags, keywords } = fields;
+        const { title, body, categories, tags, keywords,faqs } = fields;
 
         if (!title || !title.length) {
             return res.status(400).json({
@@ -47,6 +47,12 @@ exports.create = (req, res) => {
             });
         }
 
+        if (!faqs || faqs[0] ===  null) {
+            return res.status(400).json({
+                error: 'FAQ is required'
+            });
+        }
+
         let blog = new Blog();
         blog.title = title;
         blog.body = body;
@@ -59,6 +65,8 @@ exports.create = (req, res) => {
         let arrayOfCategories = categories && categories.split(',');
         let arrayOfTags = tags && tags.split(',');
         let arrayOfKeywords = keywords && keywords.split(',');
+
+
 
         if (files.photo) {
             if (files.photo.size > 10000000) {
@@ -98,7 +106,17 @@ exports.create = (req, res) => {
                                                   error: errorHandler(err)
                                               });
                                           } else {
-                                              res.json(result);
+                                            Blog.findByIdAndUpdate(result._id, { $push: { faqs: faqs } }, { new: true }).exec(
+                                               (err, result) => {
+                                                   if (err) {
+                                                       return res.status(400).json({
+                                                           error: errorHandler(err)
+                                                       });
+                                                   } else {
+                                                       res.json(result);
+                                                   }
+                                               }
+                                           );
                                           }
                                       }
                                   );
@@ -182,8 +200,9 @@ exports.read = (req, res) => {
         // .select("-photo")
         .populate('categories', '_id name slug')
         .populate('tags', '_id name slug')
+        .populate('faqs')
         .populate('postedBy', '_id name username')
-        .select('_id title body slug mtitle mdesc categories tags postedBy createdAt updatedAt')
+        .select('_id title body slug mtitle mdesc categories tags postedBy createdAt updatedAt faqs')
         .exec((err, data) => {
             if (err) {
                 return res.json({
@@ -371,5 +390,3 @@ module.exports.blogCommentsById = async (req,res) => {
    comments
   })
 }
-
- 
