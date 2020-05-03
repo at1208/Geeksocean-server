@@ -160,7 +160,7 @@ exports.listAllBlogsCategoriesTags = (req, res) => {
         .populate('categories', '_id name slug')
         .populate('tags', '_id name slug')
         .populate('postedBy', '_id name username profile')
-        .sort({ createdAt: -1 })
+        .sort({ updatedAt: -1 })
         .skip(skip)
         .limit(limit)
         .select('_id title slug excerpt categories tags postedBy createdAt updatedAt')
@@ -306,11 +306,12 @@ exports.photo = (req, res) => {
 
 exports.listRelated = (req, res) => {
     // console.log(req.body.blog);
-    let limit = req.body.limit ? parseInt(req.body.limit) : 3;
+    let limit = req.body.limit ? parseInt(req.body.limit) : 5;
     const { _id, categories } = req.body.blog;
 
     Blog.find({ _id: { $ne: _id }, categories: { $in: categories } })
         .limit(limit)
+        .sort({ createdAt: -1 })
         .populate('postedBy', '_id name username profile')
         .select('title slug excerpt postedBy createdAt updatedAt')
         .exec((err, blogs) => {
@@ -355,6 +356,7 @@ exports.listByUser = (req, res) => {
         Blog.find({ postedBy: userId })
             .populate('categories', '_id name slug')
             .populate('tags', '_id name slug')
+            .sort({ updatedAt: -1 })
             .populate('postedBy', '_id name username')
             .select('_id title slug postedBy createdAt updatedAt')
             .exec((err, data) => {
@@ -389,4 +391,35 @@ module.exports.blogCommentsById = async (req,res) => {
   res.json({
    comments
   })
+}
+
+
+module.exports.randomBlog = async (req,res) => {
+  await Blog.aggregate([{$sample: {size: 3}}])
+  .exec((err,result) => {
+    if(err){
+      res.json({
+        error: err
+      })
+    }
+    res.json({
+      result
+    })
+  })
+
+}
+
+module.exports.singleRandomBlog = async (req,res) => {
+  await Blog.aggregate([{$sample: {size: 1}}])
+  .exec((err,result) => {
+    if(err){
+      res.json({
+        error: err
+      })
+    }
+    res.json({
+      result
+    })
+  })
+
 }
