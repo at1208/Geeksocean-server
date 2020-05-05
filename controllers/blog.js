@@ -395,7 +395,9 @@ module.exports.blogCommentsById = async (req,res) => {
 
 
 module.exports.randomBlog = async (req,res) => {
-  await Blog.aggregate([{$sample: {size: 3}}])
+  await Blog.find({})
+     .sort({ updatedAt: -1 })
+     .limit(3)
   .exec((err,result) => {
     if(err){
       res.json({
