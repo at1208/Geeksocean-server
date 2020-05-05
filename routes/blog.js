@@ -14,7 +14,8 @@ const {
     blogComments,
     blogCommentsById,
     randomBlog,
-    singleRandomBlog
+    singleRandomBlog,
+    topLatestBlogs
 } = require('../controllers/blog');
 
 const { requireSignin, adminMiddleware, authMiddleware, canUpdateDeleteBlog } = require('../controllers/auth');
@@ -30,6 +31,7 @@ router.post('/blogs/related', listRelated);
 router.get('/blogs/search', listSearch);
 router.get('/blogs/randomBlog', randomBlog);
 router.get('/blogs/singleRandomBlogs', singleRandomBlog);
+router.get('/blogs/latest-Blogs/:category', topLatestBlogs);
 
 
 // auth user blog crud

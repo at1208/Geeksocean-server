@@ -408,7 +408,6 @@ module.exports.randomBlog = async (req,res) => {
       result
     })
   })
-
 }
 
 module.exports.singleRandomBlog = async (req,res) => {
@@ -425,3 +424,19 @@ module.exports.singleRandomBlog = async (req,res) => {
   })
 
 }
+
+
+exports.topLatestBlogs = async (req, res) => {
+    const category = req.params.category
+  await  Blog.find({ categories: { $in: category } })
+        .limit(3)
+        .sort({ createdAt: -1 })
+        .exec((err, blogs) => {
+            if (err) {
+                return res.status(400).json({
+                    error: 'Blogs not found'
+                });
+            }
+            res.json(blogs);
+        });
+};
