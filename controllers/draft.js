@@ -28,11 +28,11 @@ exports.createDraft = (req, res) => {
           });
       }
 
-      // if (!body || body.length < 200) {
-      //     return res.status(400).json({
-      //         error: 'Content is too short'
-      //     });
-      // }
+      if (!body || body.length < 1) {
+          return res.status(400).json({
+              error: 'minimum one letter character is required to save in a draft'
+          });
+      }
       //
       // if (!categories || categories.length === 0) {
       //     return res.status(400).json({
@@ -208,6 +208,7 @@ exports.listOfDraftByUser = (req, res) => {
         }
         let userId = user._id;
         Draft.find({ postedBy: userId })
+            .sort({ createdAt: -1 })
             .populate('categories', '_id name slug')
             .populate('tags', '_id name slug')
             .populate('postedBy', '_id name username')
