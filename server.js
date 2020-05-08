@@ -17,8 +17,13 @@ const draftRoutes = require('./routes/draft');
 const popularRoutes = require('./routes/popular');
 const faqRoutes = require('./routes/faq');
 
+
 // app
 const app = express();
+
+
+
+
 
 // db
 mongoose

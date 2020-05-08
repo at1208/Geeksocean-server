@@ -43,6 +43,7 @@ const blogSchema = new mongoose.Schema(
             type: ObjectId,
             ref: 'User'
         },
+        views: [],
         comments: []
     },
     { timestamps: true }
