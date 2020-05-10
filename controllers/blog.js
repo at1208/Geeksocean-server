@@ -160,7 +160,7 @@ exports.listAllBlogsCategoriesTags = (req, res) => {
         .populate('categories', '_id name slug')
         .populate('tags', '_id name slug')
         .populate('postedBy', '_id name username profile')
-        .sort({ createdAt: -1 })
+        .sort({ updatedAt: -1 })
         .skip(skip)
         .limit(limit)
         .select('_id title slug excerpt categories tags postedBy createdAt updatedAt views')
