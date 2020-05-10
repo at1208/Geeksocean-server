@@ -16,12 +16,11 @@ const keywordRoutes = require('./routes/keyword');
 const draftRoutes = require('./routes/draft');
 const popularRoutes = require('./routes/popular');
 const faqRoutes = require('./routes/faq');
+const awsS3Routes = require('./routes/awsS3');
 
 
 // app
 const app = express();
-
-
 
 
 
@@ -45,6 +44,8 @@ app.use(cookieParser());
 // cors
 if (process.env.NODE_ENV === 'development') {
     app.use(cors({ origin: `${process.env.CLIENT_URL}` }));
+} else{
+    app.use(cors({ origin: `${process.env.CLIENT_URL}` }));
 }
 // routes middleware
 app.use('/api', blogRoutes);
@@ -57,6 +58,7 @@ app.use('/api', keywordRoutes);
 app.use('/api', draftRoutes);
 app.use('/api', popularRoutes);
 app.use('/api', faqRoutes);
+// app.use('/api', awsS3Routes);
 
 //
 // if (process.env.NODE_ENV === 'production') {
