@@ -398,6 +398,7 @@ module.exports.randomBlog = async (req,res) => {
   await Blog.find({})
      .sort({ createdAt: -1 })
      .limit(3)
+     .select('slug title createdAt')
   .exec((err,result) => {
     if(err){
       res.json({
@@ -431,6 +432,7 @@ exports.topLatestBlogs = async (req, res) => {
   await  Blog.find({ categories: { $in: category } })
         .limit(3)
         .sort({ createdAt: -1 })
+        .select('slug title createdAt')
         .exec((err, blogs) => {
             if (err) {
                 return res.status(400).json({
