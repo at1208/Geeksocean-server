@@ -135,7 +135,16 @@ exports.users = async (req,res) => {
 exports.userById = async (req,res) => {
   const _id = req.params.id
   const user = await User.findById(_id)
-  res.json({
-    user
+  .select('username')
+  .exec((err, user) => {
+     if(err){
+       res.status(200).json({
+         error: err
+       })
+     }
+     res.status(200).json({
+       user
+     })
   })
+
 }
