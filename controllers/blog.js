@@ -413,14 +413,19 @@ module.exports.randomBlog = async (req,res) => {
 
 module.exports.singleRandomBlog = async (req,res) => {
   await Blog.aggregate([{$sample: {size: 1}}])
-  .exec((err,result) => {
+  .exec((err,data) => {
     if(err){
       res.json({
         error: err
       })
     }
+
+const result = { title: data[0].title, slug: data[0].slug }
+
     res.json({
-      result
+         result
+        // title: result[0].title,
+        // slug: result[0].slug
     })
   })
 
