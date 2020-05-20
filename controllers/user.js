@@ -126,7 +126,18 @@ exports.photo = (req, res) => {
 };
 
 exports.users = async (req,res) => {
-  const users = await User.find()
+  await User.find()
+  .select('username name role createdAt')
+  .exec((err,users) => {
+    if(err){
+      res.status(400).json({
+        error:err
+      })
+    }
+    res.status(200).json({
+      users
+    })
+  })
   res.json({
     users
   })
